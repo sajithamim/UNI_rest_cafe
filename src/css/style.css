@@ -1,0 +1,45 @@
+.greyText{
+    color:  grey !important;
+}
+.redText{
+    color: red; 
+}
+.name{
+    font-weight: bold;
+}
+.button_grp{
+    background-color: green !important;
+    border-radius: 20px ;
+    text-align: center;
+    width: 150px ;
+    position: absolute;
+    height: 50px;
+    font-weight: bold;
+    font-size: 20px;
+}
+.minus{
+    background-color: green !important;
+    width: 20px;
+    margin-left: 0px;
+}
+.zero{
+    background-color: green !important;
+    width: 20px;
+    margin-left: 10px;
+}
+.plus{
+    background-color: green !important;
+    width: 20px;
+    margin-left: 15px;
+}
+.cartValue{
+    background: blue;
+    color: #fff;
+    font-size: 12px;
+    padding: 0 5px;
+    vertical-align: top;
+    border-radius: 50%;
+    margin-left: -9px;
+    margin-top: 15px;
+    display: inline;
+}
