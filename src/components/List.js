@@ -12,7 +12,7 @@ const List = () => {
     const dispatch = useDispatch();
     const { cafeDetails } = useSelector(state => state.details);
     const id = [];
-    const [state, setState] = useState();
+    const [state, setState] = useState(0;
    
     useEffect(() => {
         dispatch(getCafeData());
