@@ -12,23 +12,10 @@ const List = () => {
     const dispatch = useDispatch();
     const { cafeDetails } = useSelector(state => state.details);
     const id = [];
-    console.log("item",id);
-    cafeDetails[0] && cafeDetails[0].table_menu_list.map((item) => {
-        id.push({
-            menu_category_id: item.menu_category_id
-        })
-    })
-    const [state, setState] = useState([]);
-    const [cart, setCart] = useState(
-        {
-          category: 11,
-          count: 0,
-        }
-      );
-    console.log("cart",cart);
+    const [state, setState] = useState();
+   
     useEffect(() => {
         dispatch(getCafeData());
-        
     }, [])
 
     const { TabPane } = Tabs;
@@ -43,7 +30,7 @@ const List = () => {
                     <span>{record.dish_price}{record.currency}<br /></span>
                     <span className="greyText">{record.dish_description}</span><br />
                     <Button className="button_grp">
-                        <span className="minus" onClick={() => {minus(record)}}>-</span><span className="zero">{cart.count}</span><span className="plus" onClick= {() => plus(record)}>+</span>
+                        <span className="minus" onClick={() => {minus(record)}}>-</span><span className="zero">{state}</span><span className="plus" onClick= {() => plus(record)}>+</span>
                     </Button><br/>
                     <span className="redText">{record.dish_Availability}</span>
                 </span>
@@ -60,26 +47,11 @@ const List = () => {
     ];
 
     const minus = (id) => {
-    
-        // const cartValue = {};
-        // cartValue[id.menu_category_id] = state - 1 ;
-        // console.log("cart", cartValue);
-        // setState(cartValue);
+            setState(state-1);
     }
 
     const plus = (id) => {
-        console.log("cart", cart);
-        if(cart.count >= 0){
-            setCart(...cart, cart.count + 1);
-        }
-        // else if(cart.count > 0){
-        //     console.log("else");
-        //     setCart(...cart, cart.count + 1);
-        // }
-        // const cartValue = [];
-        // cartValue[id.menu_category_id] = state + 1 
-        // console.log("cart", cartValue);
-        // setState(cartValue);
+       setState(state+1);
     }
 
     const callback = (cat_id) => {
@@ -93,7 +65,7 @@ const List = () => {
                 dish_price: item.dish_price,
                 dish_description: item.dish_description,
                 calorie: item.dish_calories + " Calorie",
-                // cartValue: state,
+                cartValue: state,
                 dish_Availability: item.dish_Availability === true ? "customization available" : "Not available",
                 image: <img src={item.dish_image} style={{ width: '70px', height: '70px' }} />,
                 menu_category_id: cat_list[0].menu_category_id,
@@ -109,7 +81,7 @@ const List = () => {
                 <h3>My Orders
                     <IconButton>
                         <ShoppingCartIcon></ShoppingCartIcon>
-                        <label className="cartValue">{cart.count}</label>
+                        <label className="cartValue">{state}</label>
                     </IconButton>
                 </h3>
             }>
