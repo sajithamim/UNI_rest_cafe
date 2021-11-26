@@ -11,7 +11,6 @@ const List = () => {
     const dispatch = useDispatch();
     const { cafeDetails } = useSelector(state => state.details);
     const id = [];
-
     const [state, setState] = useState([0]);
     const [quantity, setQuantity] = useState();
 
