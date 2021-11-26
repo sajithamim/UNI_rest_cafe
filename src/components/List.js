@@ -6,24 +6,20 @@ import { Card, Tabs, Table, Button } from 'antd';
 import { IconButton } from "@material-ui/core";
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { getCafeData } from "../Redux/Action/DetailsAction";
-// import { Button } from "@mui/material";
 
 const List = () => {
     const dispatch = useDispatch();
     const { cafeDetails } = useSelector(state => state.details);
     const id = [];
-    console.log("item",id);
-    // cafeDetails[0] && cafeDetails[0].table_menu_list.map((item) => {
-    //     id.push({
-    //         menu_category_id: item.menu_category_id
-    //     })
-    // })
-    const [state, setState] = useState(0);
+
+    const [state, setState] = useState([0]);
+    const [quantity, setQuantity] = useState();
+
+    const [cart, setCart] = useState([]);
 
     useEffect(() => {
         dispatch(getCafeData());
-        
-    }, [])
+    }, [cart])
 
     const { TabPane } = Tabs;
 
@@ -36,10 +32,23 @@ const List = () => {
                     <span className="name">{record.name}<br /></span>
                     <span>{record.dish_price}{record.currency}<br /></span>
                     <span className="greyText">{record.dish_description}</span><br />
-                    <Button className="button_grp">
-                        <span className="minus" onClick={() => {minus(record)}}>-</span><span className="zero">{state}</span><span className="plus" onClick= {() => plus()}>+</span>
-                    </Button><br/>
-                    <span className="redText">{record.dish_Availability}</span>
+                    <Button className="button_grp" >
+                        <span className="minus" onClick={() => { minus(record.name.toLowerCase().replace(" ", "_")) }}>-</span>
+
+                        {
+                            cart.find((item) => {
+                                // if (item.id == record.name.toLowerCase().replace(" ", "_")) {
+                                //     return (<span className="zero">{item.quantity}</span>);
+                                //     console.log("jkjkj", item);
+                                // }
+                                return(
+                                    (item.id == record.name.toLowerCase().replace(" ", "_")) ? <span>{item.quantity}</span> : <span>0</span>
+                                )
+                            })
+                        }
+                        <span className="plus" onClick={() => plus(record.name.toLowerCase().replace(" ", "_"))}>+</span>
+                    </Button><br /><br /><br />
+                    <span className="redText" >{record.dish_Availability}</span>
                 </span>
             )
         },
@@ -51,35 +60,44 @@ const List = () => {
             dataIndex: 'image',
             key: 'image',
         },
-        {
-            dataIndex: 'menu_category_id',
-            key: 'menu_category_id',
-        },
     ];
 
-    const minus = (id) => {
-        setState(state - 1);
+    const minus = (item) => {
+        let cartItem = cart.filter(cart => (cart.id === item))
+        if (cartItem.length > 0) {
+            setCart([...cart, { id: item, quantity: cartItem[0].quantity - 1 }])
+        } else {
+            setCart([...cart, { id: item, quantity: 1 }])
+        }
     }
 
-    const plus = () => {
-        setState(state + 1);
+    const plus = (item) => {
+        let cartItem = cart.filter(cart => (cart.id === item))
+        if (cartItem.length > 0) {
+            setCart([...cart, { id: item, quantity: cartItem[0].quantity + 1 }])
+        } else {
+            setCart([...cart, { id: item, quantity: 1 }])
+        }
     }
 
     const callback = (cat_id) => {
         let dishList = [];
         let cat_list = cafeDetails[0] && cafeDetails[0].table_menu_list.filter((item) => item.menu_category_id === cat_id)
-        console.log("state",cat_list);
-        cat_list[0] && cat_list[0].category_dishes.map((item) => {
+        cat_list[0] && cat_list[0].category_dishes.map((item, key) => {
+            var cartValue = cart.filter((item1 => item1.id === item.dish_name.toLowerCase().replace(" ", "_")))
             dishList.push({
+                key: key,
+                id: key,
                 name: item.dish_name,
                 currency: item.dish_currency,
                 dish_price: item.dish_price,
                 dish_description: item.dish_description,
                 calorie: item.dish_calories + " Calorie",
-                cartValue: state,
-                dish_Availability: item.dish_Availability === true ? "customization available" : "Not available",
+                // cartValue: state,
+                dish_Availability: item.addonCat.length === 0 ? "Not available" : "Customizations available",
                 image: <img src={item.dish_image} style={{ width: '70px', height: '70px' }} />,
                 menu_category_id: cat_list[0].menu_category_id,
+                quantity: cartValue.length > 0 ? (cartValue[0].quantity) : 0,
             })
         })
         return dishList;
@@ -91,8 +109,8 @@ const List = () => {
             extra={
                 <h3>My Orders
                     <IconButton>
-                        <ShoppingCartIcon></ShoppingCartIcon>
-                        <label className="cartValue">{state}</label>
+                        <ShoppingCartIcon style={{ fontSize: '40px' }}></ShoppingCartIcon>
+                        <label className="cartValue">{0}</label>
                     </IconButton>
                 </h3>
             }>

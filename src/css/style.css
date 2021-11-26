@@ -3,18 +3,20 @@
 }
 .redText{
     color: red; 
+    margin-top: 280px;
 }
 .name{
     font-weight: bold;
 }
 .button_grp{
     background-color: green !important;
-    border-radius: 20px ;
+    border-radius: 30px ;
     text-align: center;
     width: 150px ;
     position: absolute;
     height: 50px;
     font-weight: bold;
+    color: white !important;
     font-size: 20px;
 }
 .minus{
@@ -33,13 +35,13 @@
     margin-left: 15px;
 }
 .cartValue{
-    background: blue;
+    background: red;
     color: #fff;
     font-size: 12px;
     padding: 0 5px;
     vertical-align: top;
     border-radius: 50%;
-    margin-left: -9px;
-    margin-top: 15px;
+    margin-left: -14px;
+    margin-top: -30px;
     display: inline;
 }
